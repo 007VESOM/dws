@@ -31,7 +31,7 @@ const Worldview: React.FC = () => {
             분간할 수 없는 시간."
           </p>
           
-          <p className="text-xs md:text-sm text-slate-500 font-light mt-8 tracking-wider max-w-xl mx-auto leading-8 text-justify md:text-center">
+          <p className="text-xs md:text-sm text-slate-500 font-light mt-8 tracking-wider max-w-xl mx-auto leading-8 text-justify md:text-center whitespace-pre-line">
             {WORLDVIEW.description}
           </p>
         </div>
@@ -53,29 +53,43 @@ const Worldview: React.FC = () => {
           </div>
 
           <div className="relative w-full h-full">
-            {/* North */}
-            <div className="absolute top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center group-hover:-translate-y-2 transition-transform duration-1000">
+            {/* North (Fenrir) */}
+            <div className="absolute top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center group-hover:-translate-y-2 transition-transform duration-1000 z-10">
                <span className="text-2xl opacity-80 mb-2">🏔️</span>
                <div className="h-8 w-px bg-gradient-to-b from-slate-600 to-transparent"></div>
                <span className="text-slate-400 font-serif tracking-widest text-[10px] uppercase mt-2">The Grey Mountains</span>
             </div>
 
-            {/* Center */}
+            {/* West (Taxidea / Badger / Underground) */}
+            <div className="absolute top-[60%] left-[15%] md:left-[20%] flex flex-col items-center group-hover:translate-x-2 transition-transform duration-1000 z-10">
+               <span className="text-xl opacity-70 mb-1">🕳️</span>
+               <div className="w-8 h-px bg-gradient-to-l from-slate-600 to-transparent block md:hidden"></div>
+               <span className="text-slate-500 font-serif tracking-widest text-[9px] uppercase mt-1">Underground Market</span>
+            </div>
+
+            {/* East (Corvus / Crow / Forest) */}
+            <div className="absolute top-[35%] right-[15%] md:right-[20%] flex flex-col items-center group-hover:-translate-x-2 transition-transform duration-1000 z-10">
+               <span className="text-xl opacity-70 mb-1">🌲</span>
+               <div className="w-8 h-px bg-gradient-to-r from-slate-600 to-transparent block md:hidden"></div>
+               <span className="text-slate-500 font-serif tracking-widest text-[9px] uppercase mt-1">Shadow Forest</span>
+            </div>
+
+            {/* Center (Fallen Empire) */}
             <div className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-0">
                <div className="absolute w-[300px] h-[1px] bg-white/5 rotate-45"></div>
                <div className="absolute w-[300px] h-[1px] bg-white/5 -rotate-45"></div>
                <span className="text-xl opacity-50 grayscale">🏚️</span>
-               <span className="text-slate-600 font-serif tracking-widest text-[9px] uppercase mt-2">Fallen Capital</span>
+               <span className="text-slate-600 font-serif tracking-widest text-[9px] uppercase mt-2">Fallen Empire</span>
             </div>
 
-            {/* South */}
-            <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 flex flex-col-reverse items-center group-hover:translate-y-2 transition-transform duration-1000">
+            {/* South (Coyote) */}
+            <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 flex flex-col-reverse items-center group-hover:translate-y-2 transition-transform duration-1000 z-10">
                <span className="text-2xl opacity-80 mt-2">🌪️</span>
                <div className="h-8 w-px bg-gradient-to-t from-slate-600 to-transparent"></div>
                <span className="text-slate-400 font-serif tracking-widest text-[10px] uppercase mb-2">Windy Plains</span>
             </div>
             
-            {/* Radar */}
+            {/* Radar Animation */}
             <div className="absolute top-1/2 left-1/2 w-[500px] h-[500px] -translate-x-1/2 -translate-y-1/2 border border-white/5 rounded-full animate-[spin_15s_linear_infinite] pointer-events-none opacity-30">
                 <div className="w-full h-1/2 bg-gradient-to-r from-transparent via-indigo-500/10 to-transparent blur-md"></div>
             </div>
@@ -127,7 +141,7 @@ const Worldview: React.FC = () => {
       <div className="mt-24 p-12 text-center relative max-w-3xl mx-auto">
         <div className="relative z-10">
             <h3 className="serif text-xl md:text-2xl text-slate-300 mb-4 leading-relaxed font-light italic">
-            "당신의 선택이 <span className="text-amber-100/80 not-italic border-b border-amber-200/20 pb-1">야성의 역사</span>를 새로 씁니다."
+            "당신을 기다리는 <span className="text-amber-100/80 not-italic border-b border-amber-200/20 pb-1">두 짐승</span>을 만나러 가는 길."
             </h3>
             <div className="w-1 h-8 bg-gradient-to-b from-slate-700 to-transparent mx-auto mt-8"></div>
         </div>

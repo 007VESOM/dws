@@ -20,20 +20,21 @@ const Helper: React.FC = () => {
             <h3 className="text-xl font-serif italic text-slate-300 tracking-wide">Player Commands</h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
+        {/* Changed grid to single column for full width to prevent text wrapping */}
+        <div className="grid grid-cols-1 gap-6 px-2">
           {CHAT_COMMANDS.map((group, idx) => (
             <div key={idx} className="bg-[#151020]/60 backdrop-blur-md border border-white/5 rounded-2xl p-8 hover:border-indigo-500/20 transition-colors group">
               <div className="flex items-center mb-6 border-b border-white/5 pb-4">
                 <span className="text-xl mr-3 opacity-70 grayscale group-hover:grayscale-0 transition-all">{group.icon}</span>
-                <h4 className="text-base font-bold text-slate-300 tracking-widest uppercase">{group.category}</h4>
+                <h4 className="text-lg font-bold text-slate-300 tracking-widest uppercase">{group.category}</h4>
               </div>
-              <ul className="space-y-4">
+              <ul className="space-y-6">
                 {group.items.map((item, i) => (
-                  <li key={i} className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
-                    <span className="text-amber-200/80 font-mono text-xs tracking-wider min-w-[100px] flex-shrink-0 text-left">
+                  <li key={i} className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-6 border-b border-white/5 last:border-0 pb-4 last:pb-0">
+                    <span className="text-amber-200 font-mono text-lg tracking-wider min-w-[160px] flex-shrink-0 text-left font-medium">
                       {item.command}
                     </span>
-                    <span className="text-slate-500 text-xs leading-relaxed font-light">
+                    <span className="text-slate-400 text-sm md:text-base leading-7 font-light">
                       {item.desc}
                     </span>
                   </li>
@@ -71,7 +72,7 @@ const Helper: React.FC = () => {
                     )}
                   </h4>
                   
-                  <p className="text-slate-400 leading-7 text-xs font-light relative z-10">
+                  <p className="text-slate-400 leading-7 text-sm md:text-base font-light relative z-10">
                     {item.description}
                   </p>
                 </div>

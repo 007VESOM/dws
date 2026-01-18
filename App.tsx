@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { CHARACTERS } from './constants';
 import { Character } from './types';
@@ -12,8 +13,10 @@ import StarryBackground from './components/StarryBackground';
 const BGM_URL = "https://mangae.uk/%EC%84%A4%EC%9B%90%20%EC%95%84%EB%9E%98%20%EC%9E%A0%EB%93%A0%20%EC%88%B2.mp3";
 // 부드러운 UI 클릭 효과음 (무료 라이선스)
 const CLICK_SFX_URL = "https://cdn.pixabay.com/download/audio/2022/03/24/audio_c8b417b165.mp3?filename=mouse-click-153941.mp3";
-// 메인 링크
-const MAIN_LINK = "https://share.crack.wrtn.ai/8jxc9yz";
+// 링크 설정
+const CRACK_LINK = "https://share.crack.wrtn.ai/znedgt"; // 하단 Crack 버튼용
+const START_STORY_LINK = "https://share.crack.wrtn.ai/8jxc9yz"; // 메인 Start Story 버튼용
+const POSTYPE_LINK = "https://www.postype.com/@k-mangae";
 
 type Tab = 'worldview' | 'characters' | 'helper';
 
@@ -23,6 +26,7 @@ const App: React.FC = () => {
   const [secretRevealed, setSecretRevealed] = useState(false);
   const [isRevealing, setIsRevealing] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const [showModal, setShowModal] = useState(false); // 모달 상태 추가
   
   // 음악 상태 관리
   const [isMusicPlaying, setIsMusicPlaying] = useState(true);
@@ -72,7 +76,7 @@ const App: React.FC = () => {
   };
 
   const handleRevealSecret = () => {
-    if (isRevealing) return;
+    if (isRevealing || secretRevealed) return;
     setIsRevealing(true);
     
     setTimeout(() => {
@@ -119,19 +123,25 @@ const App: React.FC = () => {
                   <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-amber-200/20 to-transparent z-20"></div>
 
                   {/* 메인 비주얼 */}
-                  <div className="relative h-[24rem] md:h-[30rem] overflow-hidden flex-shrink-0">
+                  <div 
+                    className="relative h-[24rem] md:h-[30rem] overflow-hidden flex-shrink-0 cursor-pointer"
+                    onClick={() => setShowModal(true)}
+                  >
                     <img
                       src={selectedChar.imageUrl}
                       alt={selectedChar.name}
-                      className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-105 opacity-90"
+                      className="w-full h-full object-cover transition-all duration-[1s] group-hover:scale-105 opacity-90 group-hover:opacity-100"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
-                    <div className="absolute bottom-8 left-8 right-8 text-white">
-                      <div className="flex items-center space-x-3 mb-3">
-                         <div className="h-px w-8 bg-amber-200/70"></div>
-                         <p className="text-[10px] tracking-[0.4em] text-amber-100 uppercase font-light">{selectedChar.japaneseName}</p>
+                    {/* 어두운 그라데이션 (호버 시 사라짐) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-slate-900/10 transition-opacity duration-700 group-hover:opacity-0"></div>
+                    
+                    {/* 좌측: 이름 및 기본 정보 (호버 시 투명도 조절 선택 가능, 현재는 유지) */}
+                    <div className="absolute bottom-20 left-6 md:bottom-24 md:left-10 z-20 text-white text-left transition-opacity duration-500 group-hover:opacity-0">
+                      <div className="flex items-center space-x-3 mb-2">
+                          <div className="h-px w-8 bg-amber-200/70"></div>
+                          <p className="text-[10px] tracking-[0.4em] text-amber-100 uppercase font-light">{selectedChar.japaneseName}</p>
                       </div>
-                      <h2 className="text-4xl md:text-5xl font-serif text-white mb-3 tracking-wide drop-shadow-lg">{selectedChar.name.split(' (')[0]}</h2>
+                      <h2 className="text-4xl md:text-6xl font-serif text-white mb-3 tracking-wide drop-shadow-lg">{selectedChar.name.split(' (')[0]}</h2>
                       <div className="flex flex-wrap gap-2">
                         <span className="bg-indigo-900/50 text-indigo-100 px-3 py-1 rounded-full text-xs tracking-wider border border-indigo-500/30 backdrop-blur-sm">
                           {selectedChar.role}
@@ -140,6 +150,15 @@ const App: React.FC = () => {
                           {selectedChar.birthday}
                         </span>
                       </div>
+                    </div>
+
+                    {/* 중앙 하단: 캐릭터 대사 (호버 시 투명도 조절) */}
+                    <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center px-4 transition-opacity duration-500 group-hover:opacity-0">
+                        <div className="max-w-5xl w-full text-center">
+                            <p className="font-serif italic text-lg md:text-xl text-slate-100/90 leading-relaxed drop-shadow-md whitespace-nowrap overflow-hidden text-ellipsis px-4 py-2">
+                              "{selectedChar.catchphrase}"
+                            </p>
+                        </div>
                     </div>
                   </div>
 
@@ -173,9 +192,6 @@ const App: React.FC = () => {
                       <section className="space-y-4">
                         <h4 className="text-[10px] text-amber-200/50 tracking-[0.3em] uppercase border-l border-amber-500/30 pl-3">Description</h4>
                         <p className="text-slate-300 leading-7 text-xs font-light tracking-wide text-justify">{selectedChar.description}</p>
-                        <div className="bg-indigo-950/30 p-4 rounded-xl text-slate-400 text-[11px] border border-indigo-500/10 text-center leading-relaxed font-serif italic">
-                          "{selectedChar.catchphrase}"
-                        </div>
                       </section>
 
                       <section className="space-y-2">
@@ -194,6 +210,7 @@ const App: React.FC = () => {
                    {/* Decorative Icon Background */}
                 </div>
                 
+                {/* Header */}
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
                   <div>
                     <h4 className="text-amber-100 font-serif italic text-2xl tracking-wide mb-2 flex items-center">
@@ -202,18 +219,9 @@ const App: React.FC = () => {
                     </h4>
                     <p className="text-slate-500 text-xs tracking-wider font-light">이 기록은 대상의 심연을 다루며, 열람 시 주의가 필요합니다.</p>
                   </div>
-                  
-                  {!secretRevealed && !isRevealing && (
-                    <button 
-                      onClick={handleRevealSecret}
-                      className="px-8 py-3 bg-white/5 hover:bg-white/10 text-amber-100 border border-amber-200/30 rounded-full font-light transition-all active:scale-95 flex items-center space-x-3 group hover:border-amber-200/50"
-                    >
-                      <svg className="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                      <span className="tracking-widest text-sm">UNLOCK SECRET</span>
-                    </button>
-                  )}
                 </div>
 
+                {/* Content Area */}
                 <div className="relative z-10 min-h-[140px] flex items-center justify-center">
                   {isRevealing ? (
                     <div className="flex flex-col items-center space-y-6">
@@ -222,43 +230,27 @@ const App: React.FC = () => {
                     </div>
                   ) : secretRevealed ? (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 w-full">
-                      <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-stretch">
-                        {/* 비밀 상세 내용 */}
-                        <div className="md:col-span-8 bg-black/20 border border-white/5 p-8 rounded-2xl backdrop-blur-sm">
-                          <div className="flex items-center space-x-4 mb-6">
-                             <span className="text-amber-500/80 text-[10px] tracking-[0.2em] uppercase py-1 px-3 border border-amber-500/20 rounded-sm">Top Secret</span>
-                             <div className="h-px flex-1 bg-white/5"></div>
-                          </div>
-                          <div className="text-slate-300 text-sm leading-8 whitespace-pre-wrap font-light tracking-wide">
-                            {selectedChar.secretIdentity}
-                          </div>
+                      {/* 비밀 상세 내용 (Full Width) */}
+                      <div className="w-full bg-black/20 border border-white/5 p-8 rounded-2xl backdrop-blur-sm">
+                        <div className="flex items-center space-x-4 mb-6">
+                            <span className="text-amber-500/80 text-[10px] tracking-[0.2em] uppercase py-1 px-3 border border-amber-500/20 rounded-sm">Top Secret</span>
+                            <div className="h-px flex-1 bg-white/5"></div>
                         </div>
-                        
-                        {/* 캐릭터 독백/상태 */}
-                        <div className="md:col-span-4 flex flex-col justify-center space-y-6">
-                          <div className="p-8 bg-indigo-950/20 border border-indigo-200/10 rounded-2xl relative">
-                            <p className="text-indigo-100 serif text-lg italic text-center leading-loose opacity-90">
-                              {selectedChar.id === 'lycaon' ? 
-                                "그대라면... 나의 이 추악한 진실마저 안아줄 수 있을까?" : 
-                                "더 아프게 해줘도 괜찮아요. 그대가 나를 보고 있다는 증거니까..."}
-                            </p>
-                          </div>
-                          <div className="flex flex-col items-center space-y-2">
-                             <div className="flex space-x-2">
-                                {[1, 2, 3].map(i => <div key={i} className="h-0.5 w-6 bg-slate-700 rounded-full overflow-hidden">
-                                  <div className="h-full bg-indigo-400 animate-[pulse_2s_infinite]" style={{ animationDelay: `${i * 0.2}s` }}></div>
-                                </div>)}
-                             </div>
-                             <p className="text-[9px] text-slate-600 uppercase tracking-[0.3em]">Sync Rate : 88%</p>
-                          </div>
+                        <div className="text-slate-300 text-sm leading-8 whitespace-pre-wrap font-light tracking-wide">
+                          {selectedChar.secretIdentity}
                         </div>
                       </div>
                     </div>
                   ) : (
-                    <div className="text-center py-8 opacity-30">
-                       <span className="text-5xl font-serif text-slate-700 block mb-4">?</span>
-                      <p className="text-slate-500 text-xs tracking-[0.2em] font-light">HIDDEN CONTENTS</p>
-                    </div>
+                    <button 
+                      onClick={handleRevealSecret}
+                      className="w-full text-center py-12 opacity-40 hover:opacity-100 transition-all duration-500 cursor-pointer group rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5"
+                    >
+                       <span className="text-5xl font-serif text-slate-500 group-hover:text-amber-200 transition-colors block mb-4 transform group-hover:scale-110 duration-500">?</span>
+                      <p className="text-slate-500 group-hover:text-amber-100 text-xs tracking-[0.3em] font-light uppercase transition-colors">
+                        Click to Decrypt Archive
+                      </p>
+                    </button>
                   )}
                 </div>
               </div>
@@ -268,6 +260,55 @@ const App: React.FC = () => {
       case 'helper':
         return <Helper />;
     }
+  };
+
+  // 모달 컴포넌트 (미연시 스타일 팝업)
+  const renderModal = () => {
+    if (!showModal) return null;
+
+    return (
+      <div 
+        className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300"
+        onClick={() => setShowModal(false)}
+      >
+        <div className="relative w-full h-full flex items-center justify-center pointer-events-none">
+          {/* 이미지 래퍼: 이미지 크기에 맞춰짐 (inline-block) */}
+          <div className="relative max-w-full max-h-[90vh] pointer-events-auto flex justify-center">
+             <img 
+               src={selectedChar.imageUrl} 
+               alt={selectedChar.name} 
+               className="max-w-full max-h-[90vh] object-contain shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-lg"
+             />
+
+             {/* 하단 미연시 대화창 - 이미지 내부 하단 배치 */}
+             <div 
+               className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:w-[80%]"
+               onClick={(e) => e.stopPropagation()} 
+             >
+               <div className="w-full bg-black/80 border border-slate-500/50 rounded-xl p-4 md:p-6 shadow-2xl relative backdrop-blur-md">
+                  
+                  {/* 이름표 */}
+                  <div className="absolute -top-3 left-4 bg-[#1a1525] text-amber-100 px-4 py-1 border border-slate-600 rounded-t-lg shadow-lg font-serif text-sm md:text-base tracking-wider">
+                    {selectedChar.name.split(' (')[0]}
+                  </div>
+
+                  {/* 대사 텍스트 */}
+                  <div className="mt-1 flex items-center justify-center text-center">
+                    <p className="text-slate-100 font-serif text-sm md:text-lg leading-relaxed tracking-wide drop-shadow-md whitespace-nowrap">
+                      "{selectedChar.catchphrase}"
+                    </p>
+                  </div>
+
+                  {/* 진행 화살표 아이콘 */}
+                  <div className="absolute bottom-3 right-3 text-amber-200/70 animate-bounce">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
+                  </div>
+               </div>
+             </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   if (showIntro) {
@@ -332,7 +373,7 @@ const App: React.FC = () => {
       </main>
 
       <div className="mt-24 flex justify-center pb-16 z-10">
-        <a href={MAIN_LINK} target="_blank" rel="noreferrer" className="group relative">
+        <a href={START_STORY_LINK} target="_blank" rel="noreferrer" className="group relative">
           <div className="absolute inset-0 bg-amber-200/20 blur-[30px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <button className="relative bg-[#1a1525] hover:bg-[#201a2e] text-amber-100/90 px-16 py-4 rounded-full font-serif italic text-lg shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-all group-hover:tracking-widest border border-amber-200/20 flex items-center">
              <span className="mr-3 text-sm not-italic font-sans tracking-widest uppercase opacity-70">Start Story</span>
@@ -345,16 +386,21 @@ const App: React.FC = () => {
         <div className="flex flex-col items-center justify-center gap-4">
            <div className="w-px h-8 bg-gradient-to-b from-white/10 to-transparent"></div>
            <div className="flex items-center text-slate-600 text-[10px] tracking-[0.3em] uppercase gap-4 font-light">
-             <span>Luminous Hearts</span>
+             <a href={POSTYPE_LINK} target="_blank" rel="noreferrer" className="hover:text-amber-200/50 transition-colors">
+               Postype
+             </a>
              <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
              <span>mangae</span>
              <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
-             <a href={MAIN_LINK} target="_blank" rel="noreferrer" className="hover:text-amber-200/50 transition-colors">
+             <a href={CRACK_LINK} target="_blank" rel="noreferrer" className="hover:text-amber-200/50 transition-colors">
                Crack
              </a>
            </div>
         </div>
       </footer>
+
+      {/* 모달 렌더링 */}
+      {renderModal()}
     </div>
   );
 };
