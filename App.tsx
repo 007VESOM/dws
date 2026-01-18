@@ -15,7 +15,7 @@ const BGM_URL = "https://mangae.uk/%EC%84%A4%EC%9B%90%20%EC%95%84%EB%9E%98%20%EC
 const CLICK_SFX_URL = "https://cdn.pixabay.com/download/audio/2022/03/24/audio_c8b417b165.mp3?filename=mouse-click-153941.mp3";
 // 링크 설정
 const CRACK_LINK = "https://share.crack.wrtn.ai/znedgt"; // 하단 Crack 버튼용
-const START_STORY_LINK = "https://share.crack.wrtn.ai/8jxc9yz"; // 메인 Start Story 버튼용
+const START_STORY_LINK = "https://share.crack.wrtn.ai/tvuk19x"; // 메인 Start Story 버튼용
 const POSTYPE_LINK = "https://www.postype.com/@k-mangae";
 
 type Tab = 'worldview' | 'characters' | 'helper';
