@@ -39,58 +39,60 @@ const Worldview: React.FC = () => {
 
       {/* 2. World Map Visualization */}
       <div className="max-w-5xl mx-auto px-4 mb-24">
-        <div className="w-full h-[350px] md:h-[450px] bg-[#100c18] rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden group">
+        <div className="w-full h-[400px] md:h-[450px] bg-[#100c18] rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden group">
           {/* Map Grid Lines */}
           <div className="absolute inset-0 opacity-[0.03]" 
                style={{ backgroundImage: `linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)`, backgroundSize: '60px 60px' }}>
           </div>
           
-          <div className="absolute top-8 left-8 z-10">
+          <div className="absolute top-6 left-6 z-10">
             <h3 className="text-slate-600 text-[10px] tracking-[0.3em] uppercase font-bold flex items-center gap-2">
               <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></span>
               Tactical Map
             </h3>
           </div>
 
-          <div className="relative w-full h-full">
-            {/* North (Fenrir) */}
-            <div className="absolute top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center group-hover:-translate-y-2 transition-transform duration-1000 z-10">
+          <div className="relative w-full h-full text-slate-400">
+            {/* North (Fenrir) - Top Center */}
+            <div className="absolute top-[12%] md:top-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center group-hover:-translate-y-2 transition-transform duration-1000 z-10">
                <span className="text-2xl opacity-80 mb-2">🏔️</span>
                <div className="h-8 w-px bg-gradient-to-b from-slate-600 to-transparent"></div>
-               <span className="text-slate-400 font-serif tracking-widest text-[10px] uppercase mt-2">The Grey Mountains</span>
+               <span className="font-serif tracking-widest text-[10px] uppercase mt-2 whitespace-nowrap">The Grey Mountains</span>
             </div>
 
-            {/* West (Taxidea / Badger / Underground) */}
-            <div className="absolute top-[60%] left-[15%] md:left-[20%] flex flex-col items-center group-hover:translate-x-2 transition-transform duration-1000 z-10">
+            {/* West (Underground) - Bottom Left on Mobile */}
+            {/* Positioned lower (70%) and aligned to start (left) to avoid center overlap */}
+            <div className="absolute top-[70%] left-6 md:top-[60%] md:left-[20%] flex flex-col items-start md:items-center group-hover:translate-x-2 transition-transform duration-1000 z-10">
                <span className="text-xl opacity-70 mb-1">🕳️</span>
-               <div className="w-8 h-px bg-gradient-to-l from-slate-600 to-transparent block md:hidden"></div>
-               <span className="text-slate-500 font-serif tracking-widest text-[9px] uppercase mt-1">Underground Market</span>
+               <div className="w-8 h-px bg-gradient-to-l from-slate-600 to-transparent hidden md:block"></div>
+               <span className="font-serif tracking-widest text-[9px] uppercase mt-1 whitespace-nowrap">Underground Market</span>
             </div>
 
-            {/* East (Corvus / Crow / Forest) */}
-            <div className="absolute top-[35%] right-[15%] md:right-[20%] flex flex-col items-center group-hover:-translate-x-2 transition-transform duration-1000 z-10">
+            {/* East (Forest) - Top Right on Mobile */}
+            {/* Positioned higher (30%) and aligned to end (right) to avoid center overlap */}
+            <div className="absolute top-[30%] right-6 md:top-[35%] md:right-[20%] flex flex-col items-end md:items-center group-hover:-translate-x-2 transition-transform duration-1000 z-10">
                <span className="text-xl opacity-70 mb-1">🌲</span>
-               <div className="w-8 h-px bg-gradient-to-r from-slate-600 to-transparent block md:hidden"></div>
-               <span className="text-slate-500 font-serif tracking-widest text-[9px] uppercase mt-1">Shadow Forest</span>
+               <div className="w-8 h-px bg-gradient-to-r from-slate-600 to-transparent hidden md:block"></div>
+               <span className="font-serif tracking-widest text-[9px] uppercase mt-1 whitespace-nowrap">Shadow Forest</span>
             </div>
 
             {/* Center (Fallen Empire) */}
-            <div className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-0">
-               <div className="absolute w-[300px] h-[1px] bg-white/5 rotate-45"></div>
-               <div className="absolute w-[300px] h-[1px] bg-white/5 -rotate-45"></div>
+            <div className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-0 pointer-events-none">
+               <div className="absolute w-[200px] md:w-[300px] h-[1px] bg-white/5 rotate-45"></div>
+               <div className="absolute w-[200px] md:w-[300px] h-[1px] bg-white/5 -rotate-45"></div>
                <span className="text-xl opacity-50 grayscale">🏚️</span>
-               <span className="text-slate-600 font-serif tracking-widest text-[9px] uppercase mt-2">Fallen Empire</span>
+               <span className="text-slate-600 font-serif tracking-widest text-[9px] uppercase mt-2 whitespace-nowrap">Fallen Empire</span>
             </div>
 
-            {/* South (Coyote) */}
-            <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 flex flex-col-reverse items-center group-hover:translate-y-2 transition-transform duration-1000 z-10">
+            {/* South (Coyote) - Bottom Center */}
+            <div className="absolute bottom-[10%] md:bottom-[20%] left-1/2 -translate-x-1/2 flex flex-col-reverse items-center group-hover:translate-y-2 transition-transform duration-1000 z-10">
                <span className="text-2xl opacity-80 mt-2">🌪️</span>
                <div className="h-8 w-px bg-gradient-to-t from-slate-600 to-transparent"></div>
-               <span className="text-slate-400 font-serif tracking-widest text-[10px] uppercase mb-2">Windy Plains</span>
+               <span className="font-serif tracking-widest text-[10px] uppercase mb-2 whitespace-nowrap">Windy Plains</span>
             </div>
             
-            {/* Radar Animation */}
-            <div className="absolute top-1/2 left-1/2 w-[500px] h-[500px] -translate-x-1/2 -translate-y-1/2 border border-white/5 rounded-full animate-[spin_15s_linear_infinite] pointer-events-none opacity-30">
+            {/* Radar Animation - 모바일 사이즈 축소 */}
+            <div className="absolute top-1/2 left-1/2 w-[220px] h-[220px] md:w-[500px] md:h-[500px] -translate-x-1/2 -translate-y-1/2 border border-white/5 rounded-full animate-[spin_15s_linear_infinite] pointer-events-none opacity-30">
                 <div className="w-full h-1/2 bg-gradient-to-r from-transparent via-indigo-500/10 to-transparent blur-md"></div>
             </div>
           </div>
