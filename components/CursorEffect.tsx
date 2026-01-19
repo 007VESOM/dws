@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface Particle {
   x: number;
@@ -26,15 +26,29 @@ const CursorEffect: React.FC = () => {
   const particles = useRef<Particle[]>([]);
   const ripples = useRef<Ripple[]>([]);
   const animationFrameId = useRef<number>(0);
-  const mouse = useRef({ x: 0, y: 0 });
-  const isMoving = useRef(false);
-  const lastMoveTime = useRef(0);
+  
+  // 최적화: 이전 생성 위치 추적 (거리 기반 스로틀링)
+  const lastSpawnPos = useRef({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 모바일 감지 (렉 방지를 위해 모바일에선 효과 끔)
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
+    // 모바일이면 캔버스 로직 실행 안함 (성능 최적화)
+    if (isMobile) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true }); // alpha: true 명시
     if (!ctx) return;
 
     const resizeCanvas = () => {
@@ -46,12 +60,12 @@ const CursorEffect: React.FC = () => {
     resizeCanvas();
 
     const createParticle = (x: number, y: number) => {
-      const size = Math.random() * 3 + 1;
-      const speedX = (Math.random() - 0.5) * 1.5;
-      const speedY = (Math.random() - 0.5) * 1.5;
+      // 파티클 개수 및 수명 감소 (성능 최적화)
+      const size = Math.random() * 2 + 1; // 크기 약간 축소
+      const speedX = (Math.random() - 0.5) * 1.0; // 속도 약간 감소
+      const speedY = (Math.random() - 0.5) * 1.0;
       const life = 1;
-      const maxLife = Math.random() * 0.5 + 0.5; // 0.5 ~ 1.0
-      // Amber-200 to Amber-400 colors
+      const maxLife = Math.random() * 0.4 + 0.4; // 수명 단축
       const color = Math.random() > 0.5 ? '253, 230, 138' : '251, 191, 36'; 
       
       particles.current.push({ x, y, size, speedX, speedY, life, maxLife, color });
@@ -62,28 +76,28 @@ const CursorEffect: React.FC = () => {
         x,
         y,
         size: 1,
-        maxSize: 40,
+        maxSize: 30, // 리플 크기 축소
         life: 1,
         color: '251, 191, 36'
       });
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.current.x = e.clientX;
-      mouse.current.y = e.clientY;
-      isMoving.current = true;
-      lastMoveTime.current = Date.now();
-      
-      // 움직일 때마다 입자 생성 (성능을 위해 확률적으로)
-      if (Math.random() > 0.5) {
+      // 최적화: 매 프레임마다 생성하지 않고, 일정 거리(15px) 이상 움직였을 때만 생성
+      const dx = e.clientX - lastSpawnPos.current.x;
+      const dy = e.clientY - lastSpawnPos.current.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist > 15) {
         createParticle(e.clientX, e.clientY);
+        lastSpawnPos.current = { x: e.clientX, y: e.clientY };
       }
     };
 
     const handleClick = (e: MouseEvent) => {
       createRipple(e.clientX, e.clientY);
-      // 클릭 시 입자 폭발
-      for (let i = 0; i < 8; i++) {
+      // 클릭 시 입자 개수 제한 (8 -> 5)
+      for (let i = 0; i < 5; i++) {
         createParticle(e.clientX, e.clientY);
       }
     };
@@ -100,7 +114,7 @@ const CursorEffect: React.FC = () => {
         const p = particles.current[i];
         p.x += p.speedX;
         p.y += p.speedY;
-        p.life -= 0.02;
+        p.life -= 0.03; // 사라지는 속도 증가
         p.size *= 0.95;
 
         if (p.life <= 0) {
@@ -130,7 +144,7 @@ const CursorEffect: React.FC = () => {
         ctx.beginPath();
         ctx.arc(r.x, r.y, r.size, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(${r.color}, ${r.life * 0.5})`;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1.5;
         ctx.stroke();
       }
 
@@ -147,7 +161,10 @@ const CursorEffect: React.FC = () => {
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, []);
+  }, [isMobile]); // isMobile 변경 시 재실행
+
+  // 모바일에서는 아무것도 렌더링하지 않음
+  if (isMobile) return null;
 
   return (
     <canvas
